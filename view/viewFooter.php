@@ -25,3 +25,4 @@ class ViewFooter{
     }
 }
 
+public function display ()
