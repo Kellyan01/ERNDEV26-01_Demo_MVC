@@ -19,6 +19,10 @@ class ModelUser extends Model{
     //CONSTRUCTEUR
 
     //GETTER ET SETTER
+    public function setEmail(string $newEmail):self{
+        $this->email = $newEmail;
+        return $this;
+    }
 
     //METHODS
     public function findAll():?array{
@@ -32,6 +36,27 @@ class ModelUser extends Model{
 
             //3. Return des données utilisateurs
             return $req->fetchAll(PDO::FETCH_ASSOC);
+        }catch(EXCEPTION $error){
+            die($error->getMessage());
+        }
+    }
+
+    public function findByEmail():array | bool | null{
+        //Try...Catch() permettant ded'envoyer une requête à la BDD pour récupérer les infos d'un compte utilisateur dont l'email a été conservé dans l'objet ModelUSer
+        try{
+            //1. Preparation de la requête
+            $req = $this->getBDD()->prepare('SELECT u.id, u.pseudo, u.email, u.password, u.created_at, r.role FROM user u INNER JOIN role r ON r.id = u.role_id WHERE u.email = ?');
+
+            //2. Binding Param : relié les ? de la requête à la valeur d'une donnée
+            $req->bindParam(1,$this->email,PDO::PARAM_STR);
+
+            //3. Exécuter la requête
+            $req->execute();
+
+            //4. Retourner la réponse de la BDD
+            return $req->fetch(PDO::FETCH_ASSOC);//fetch => [id : 1, pseudo : "root", ...] : directement le tableau associatif
+            //fetchAll => [ [id : 1, pseudo : "root", ...] ] : le tableau associatif se trouve dans un tableau
+
         }catch(EXCEPTION $error){
             die($error->getMessage());
         }
