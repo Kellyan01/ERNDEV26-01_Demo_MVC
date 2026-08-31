@@ -19,8 +19,18 @@ class ModelUser extends Model{
     //CONSTRUCTEUR
 
     //GETTER ET SETTER
+    public function setPseudo(string $newPseudo):self{
+        $this->pseudo = $newPseudo;
+        return $this;
+    }
+
     public function setEmail(string $newEmail):self{
         $this->email = $newEmail;
+        return $this;
+    }
+
+    public function setPassword(string $newPassword):self{
+        $this->password = $newPassword;
         return $this;
     }
 
@@ -56,6 +66,45 @@ class ModelUser extends Model{
             //4. Retourner la réponse de la BDD
             return $req->fetch(PDO::FETCH_ASSOC);//fetch => [id : 1, pseudo : "root", ...] : directement le tableau associatif
             //fetchAll => [ [id : 1, pseudo : "root", ...] ] : le tableau associatif se trouve dans un tableau
+
+        }catch(EXCEPTION $error){
+            die($error->getMessage());
+        }
+    }
+
+    public function findByPseudo():array | bool | null{
+        //Try...Catch() permettant ded'envoyer une requête à la BDD pour récupérer les infos d'un compte utilisateur dont l'email a été conservé dans l'objet ModelUSer
+        try{
+            //1. Preparation de la requête
+            $req = $this->getBDD()->prepare('SELECT u.id, u.pseudo, u.email, u.password, u.created_at, r.role FROM user u INNER JOIN role r ON r.id = u.role_id WHERE u.pseudo = ?');
+
+            //2. Binding Param : relié les ? de la requête à la valeur d'une donnée
+            $req->bindParam(1,$this->pseudo,PDO::PARAM_STR);
+
+            //3. Exécuter la requête
+            $req->execute();
+
+            //4. Retourner la réponse de la BDD
+            return $req->fetch(PDO::FETCH_ASSOC);//fetch => [id : 1, pseudo : "root", ...] : directement le tableau associatif
+            //fetchAll => [ [id : 1, pseudo : "root", ...] ] : le tableau associatif se trouve dans un tableau
+
+        }catch(EXCEPTION $error){
+            die($error->getMessage());
+        }
+    }
+
+    public function addUser(){
+        try{
+            //Preparation de la requête
+            $req = $this->getBDD()->prepare('INSERT INTO user (pseudo, email, password) VALUES (?,?,?)');
+
+            //Binding de Param
+            $req->bindParam(1,$this->pseudo,PDO::PARAM_STR);
+            $req->bindParam(2,$this->email,PDO::PARAM_STR);
+            $req->bindParam(3,$this->password,PDO::PARAM_STR);
+
+            //Exécution de la requête
+            $req->execute();
 
         }catch(EXCEPTION $error){
             die($error->getMessage());

@@ -36,6 +36,8 @@ switch ($path) {
         $controller = new MonUser(new ModelUser(Utils::connect()), new ViewUser("Utilisateurs","./public/src/script/scriptUser.js"));
         //Formulaire de connexion
         $controller->seConnecter();
+        //Formulaire d'inscription
+        $controller->registerUser();
         //Rendu de l'affichage
         $controller->render();
         break;

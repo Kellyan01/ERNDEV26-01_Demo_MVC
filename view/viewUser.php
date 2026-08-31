@@ -26,6 +26,15 @@ class ViewUser extends View{
         ob_start();
 ?>
             <main>
+<!-- TODO : tester la SESSION pour afficher les 2 formulaire lorsque l'on n'est pas connecté -->
+                <h2>Inscription</h2>
+                    <form action="" method="post">
+                        <label for="pseudoInscription">Votre Pseudo<input type="text" id="pseudoInscription" name="pseudoInscription"></label>
+                        <label for="emailInscription">Votre Email<input type="text" id="emailInscription" name="emailInscription"></label>
+                        <label for="passwordInscription">Votre Mot de Passe<input type="password" id="passwordInscription" name="passwordInscription"></label>
+                        <label for="passwordVerify">Votre Mot de Passe<input type="password" id="passwordVerify" name="passwordVerify"></label>
+                        <input type="submit" name="submitInscription" value="S'Inscrire">
+                    </form>
                 <h2>Connexion</h2>
                     <form action="" method="post">
                         <label for="email">Votre Email<input type="text" id="email" name="email"></label>
